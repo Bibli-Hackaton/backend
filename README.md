@@ -27,7 +27,7 @@ pip install -r requirements.txt
 ```bash
 cp .env.example .env
 ```
-*(Atualize as variáveis com os dados reais de conexão).*
+*(Atualize as variáveis com os dados reais de conexão).* 
 
 4. Suba os serviços auxiliares (Redis e Mosquitto):
 ```bash
@@ -41,7 +41,6 @@ uvicorn app.main:app --reload
 Acesse a documentação interativa (Swagger) em: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 ## WebSocket (Totem e Vigilante)
-
 - Canais: `/ws/totem`, `/ws/vigilante`, `/ws/admin`.
 - O cliente deve implementar reconexao automatica em caso de queda.
 

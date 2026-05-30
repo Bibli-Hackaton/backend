@@ -9,8 +9,14 @@ from app.admin.router import router as admin_config_router
 from app.rfid.router import router as rfid_router
 from app.rfid.fechadura_ws import router as fechadura_router
 from app.inventory.router import router as inventory_router
-<<<<<<< HEAD
-@app.on_event("startup")
+from app.sessions.router import router as sessions_router
+from app.sessions.tasks import session_expiration_loop
+from app.loans.router import router as loans_router
+from app.routers.books import router as books_router
+from app.routers.users import router as users_router
+from app.notifications.router import router as alertas_router
+from app.realtime.ws import router as realtime_router
+from app.vigilante.router import router as vigilante_router
 
 # Configurar logging
 logging.basicConfig(level=logging.INFO)
@@ -87,21 +93,6 @@ async def start_background_tasks():
     await warm_config_cache()
 
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World!"}
-
-
-@app.get("/health")
-async def health_check() -> dict[str, str]:
-    return {"status": "ok"}
-    asyncio.create_task(session_expiration_loop())
-    from app.admin.config_service import warm_config_cache
-    await warm_config_cache()
-
-
-=======
->>>>>>> 5648dbd (feat: Adiciona módulos de usuários e livros)
 @app.get("/")
 async def root():
     return {"message": "Hello World!"}
