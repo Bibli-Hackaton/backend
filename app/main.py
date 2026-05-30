@@ -66,7 +66,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 # Middleware de logging
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
