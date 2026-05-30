@@ -47,8 +47,30 @@ async def seed_users():
 
         # Create configurations
         configs = [
-            Config(chave="tempo_sessao_min", valor="30", descricao="Tempo padrão de uma sessão de estudo em minutos", atualizado_por=admin_id),
-            Config(chave="max_dias_emprestimo", valor="7", descricao="Número máximo de dias para um empréstimo", atualizado_por=admin_id)
+            Config(
+                chave="tempo_sessao_max_min",
+                valor="30",
+                descricao="Tempo maximo de sessao em minutos",
+                atualizado_por=admin_id,
+            ),
+            Config(
+                chave="dias_emprestimo_max",
+                valor="7",
+                descricao="Maximo de dias por emprestimo",
+                atualizado_por=admin_id,
+            ),
+            Config(
+                chave="cooldown_reentrada_min",
+                valor="30",
+                descricao="Minutos de espera entre sessoes",
+                atualizado_por=admin_id,
+            ),
+            Config(
+                chave="alertar_devolucao_dias_antes",
+                valor="1",
+                descricao="Dias antes do vencimento para notificar",
+                atualizado_por=admin_id,
+            ),
         ]
         
         for c in configs:
