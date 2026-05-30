@@ -46,7 +46,6 @@ Acesse a documentação interativa (Swagger) em: [http://localhost:8000/docs](ht
 - O cliente deve implementar reconexao automatica em caso de queda.
 
 ## Migrations (Alembic)
-
 Para gerar uma nova migration após alterar algum modelo (`app/models/`):
 ```bash
 make makemigrations MSG="Sua mensagem de commit"
