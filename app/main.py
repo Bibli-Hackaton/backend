@@ -90,7 +90,10 @@ async def global_exception_handler(request: Request, exc: Exception):
 async def start_background_tasks():
     asyncio.create_task(session_expiration_loop())
     from app.admin.config_service import warm_config_cache
-    await warm_config_cache()
+    try:
+        await warm_config_cache()
+    except Exception as exc:
+        logger.warning("Falha ao aquecer cache de configuracoes: %s", exc)
 
 
 @app.get("/")

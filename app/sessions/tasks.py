@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import uuid
 from datetime import datetime, timedelta, timezone
 from sqlalchemy import select
@@ -8,6 +9,8 @@ from app.core.database import async_session_maker
 from app.notifications.models import Alerta, AlertaTipo
 from app.realtime.ws import broadcast_vigilante
 from app.sessions.models import Session, SessionEstado
+
+logger = logging.getLogger(__name__)
 
 EXPIRATION_CHECK_INTERVAL_SEC = 60
 APPROVAL_TIMEOUT_MIN = 5
@@ -109,5 +112,8 @@ async def expire_sessions_once() -> None:
 
 async def session_expiration_loop() -> None:
     while True:
-        await expire_sessions_once()
+        try:
+            await expire_sessions_once()
+        except Exception as exc:
+            logger.warning("Falha ao processar expiracao de sessoes: %s", exc)
         await asyncio.sleep(EXPIRATION_CHECK_INTERVAL_SEC)
