@@ -7,7 +7,8 @@ from app.auth.router import router as auth_router
 from app.rfid.router import router as rfid_router
 from app.rfid.fechadura_ws import router as fechadura_router
 from app.inventory.router import router as inventory_router
-from app.books.router import router as books_router
+from app.routers.books import router as books_router
+from app.routers.users import router as users_router
 
 # Configurar logging
 logging.basicConfig(level=logging.INFO)
@@ -15,6 +16,7 @@ logger = logging.getLogger(__name__)
 
 tags_metadata = [
     {"name": "auth", "description": "Operações de Autenticação (Login e Validação de Tokens)."},
+    {"name": "usuarios", "description": "Gestão de usuários e permissões administrativas."},
     {"name": "rfid", "description": "Comunicação com Leitores RFID e Webhooks de Hardware."},
     {"name": "fechadura", "description": "Controle físico de acesso e WebSockets da Fechadura."},
     {"name": "inventario", "description": "Gestão de varredura de acervo em lote e relatórios de furos."},
@@ -29,6 +31,7 @@ app = FastAPI(
 )
 
 app.include_router(auth_router)
+app.include_router(users_router)
 app.include_router(rfid_router)
 app.include_router(fechadura_router)
 app.include_router(inventory_router)
@@ -62,4 +65,9 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 @app.get("/")
 async def root():
-    return {"message": "Bem vindo à API da Biblioteca Hackathon!"}
+    return {"message": "Hello World!"}
+
+
+@app.get("/health")
+async def health_check() -> dict[str, str]:
+    return {"status": "ok"}
