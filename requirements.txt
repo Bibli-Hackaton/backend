@@ -1,2 +1,11 @@
 fastapi>=0.115,<1.0
 uvicorn[standard]>=0.30,<1.0
+pydantic-settings
+sqlalchemy[asyncio]
+alembic
+asyncpg
+python-dotenv
+redis
+passlib[bcrypt]
+bcrypt
+python-jose[cryptography]

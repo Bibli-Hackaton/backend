@@ -1,25 +1,53 @@
-# FastAPI Backend
+# Biblioteca Hackathon Backend
 
-Projeto base em FastAPI para começar uma API Python simples e enxuta.
+Backend desenvolvido em **FastAPI** para o projeto da Biblioteca.
 
-## Requisitos
+## Tecnologias Principais
+- FastAPI
+- SQLAlchemy + Alembic (Migrations)
+- PostgreSQL (Supabase)
+- MQTT (Eclipse Mosquitto)
+- Redis
 
-- Python 3.11+
+## Setup Local
 
-## Instalação
-
+1. Crie e ative o ambiente virtual:
 ```bash
-pip install -r requirements-dev.txt
+python -m venv venv
+.\venv\Scripts\Activate.ps1  # Windows
+# source venv/bin/activate   # Linux/Mac
 ```
 
-## Execução
+2. Instale as dependências:
+```bash
+pip install -r requirements.txt
+```
 
+3. Crie o arquivo `.env` baseado no exemplo:
+```bash
+cp .env.example .env
+```
+*(Atualize as variáveis com os dados reais de conexão).*
+
+4. Suba os serviços auxiliares (Redis e Mosquitto):
+```bash
+make up
+```
+
+5. Rode a API:
 ```bash
 uvicorn app.main:app --reload
 ```
+Acesse a documentação interativa (Swagger) em: [http://localhost:8000/docs](http://localhost:8000/docs)
 
-## Testes
+## Migrations (Alembic)
 
+Para gerar uma nova migration após alterar algum modelo (`app/models/`):
 ```bash
-pytest
+make makemigrations MSG="Sua mensagem de commit"
+```
+
+Para aplicar as migrations no banco:
+```bash
+make migrate
 ```
