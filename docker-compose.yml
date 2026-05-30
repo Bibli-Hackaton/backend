@@ -1,6 +1,19 @@
 version: '3.8'
 
 services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: bibli_db
+    environment:
+      POSTGRES_USER: bibli
+      POSTGRES_PASSWORD: bibli_password
+      POSTGRES_DB: biblioteca
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
   redis:
     image: redis:7-alpine
     container_name: bibli_redis
@@ -11,4 +24,5 @@ services:
     restart: unless-stopped
 
 volumes:
+  pgdata:
   redis_data:

@@ -18,15 +18,17 @@ async def seed_users():
         # Create users
         admin_id = uuid.UUID('00000000-0000-0000-0000-000000000001')
         users = [
-            User(id=admin_id, nome="Administrador", email="admin@biblioteca.local", senha_hash=get_password_hash("admin123"), role=UserRole.admin),
-            User(id=uuid.UUID('00000000-0000-0000-0000-000000000002'), nome="Vigilante Silva", email="vigilante@biblioteca.local", senha_hash=get_password_hash("vigilante123"), role=UserRole.vigilante),
-            User(id=uuid.UUID('00000000-0000-0000-0000-000000000003'), nome="João Aluno", email="joao@biblioteca.local", senha_hash=get_password_hash("aluno123"), role=UserRole.aluno),
-            User(id=uuid.UUID('00000000-0000-0000-0000-000000000004'), nome="Maria Aluna", email="maria@biblioteca.local", senha_hash=get_password_hash("aluno123"), role=UserRole.aluno),
-            User(id=uuid.UUID('00000000-0000-0000-0000-000000000005'), nome="Pedro Aluno", email="pedro@biblioteca.local", senha_hash=get_password_hash("aluno123"), role=UserRole.aluno),
+            User(id=admin_id, nome="Administrador", email="admin@biblioteca.com", senha_hash=get_password_hash("admin123"), role=UserRole.admin),
+            User(id=uuid.UUID('00000000-0000-0000-0000-000000000002'), nome="Vigilante Silva", email="vigilante@biblioteca.com", senha_hash=get_password_hash("vigilante123"), role=UserRole.vigilante),
+            User(id=uuid.UUID('00000000-0000-0000-0000-000000000003'), nome="João Aluno", email="joao@biblioteca.com", senha_hash=get_password_hash("aluno123"), role=UserRole.aluno),
+            User(id=uuid.UUID('00000000-0000-0000-0000-000000000004'), nome="Maria Aluna", email="maria@biblioteca.com", senha_hash=get_password_hash("aluno123"), role=UserRole.aluno),
+            User(id=uuid.UUID('00000000-0000-0000-0000-000000000005'), nome="Pedro Aluno", email="pedro@biblioteca.com", senha_hash=get_password_hash("aluno123"), role=UserRole.aluno),
         ]
         
         for u in users:
             session.add(u)
+        
+        await session.commit()
             
         # Create 10 books
         books = [
