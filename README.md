@@ -40,6 +40,11 @@ uvicorn app.main:app --reload
 ```
 Acesse a documentação interativa (Swagger) em: [http://localhost:8000/docs](http://localhost:8000/docs)
 
+## WebSocket (Totem e Vigilante)
+
+- Canais: `/ws/totem`, `/ws/vigilante`, `/ws/admin`.
+- O cliente deve implementar reconexao automatica em caso de queda.
+
 ## Migrations (Alembic)
 
 Para gerar uma nova migration após alterar algum modelo (`app/models/`):
