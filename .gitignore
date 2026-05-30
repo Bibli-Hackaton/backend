@@ -13,6 +13,7 @@ coverage/
 .venv/
 venv/
 env/
+.env
 
 # Build artifacts
 build/
