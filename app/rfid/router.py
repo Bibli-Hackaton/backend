@@ -1,14 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy import and_
 import redis.asyncio as redis
 import json
 
 from app.core.dependencies import get_db_session
 from app.core.redis import get_redis
 from app.rfid.schemas import RFIDReadRequest
-from app.books.models import Book, MovimentacaoLivro, MovimentacaoTipo
+from app.books.models import Book, BookEstado, Loan, LoanEstado, MovimentacaoLivro, MovimentacaoTipo
 from app.notifications.models import Alerta, AlertaTipo
+from app.realtime.ws import broadcast_vigilante
+from app.sessions.models import Session, SessionEstado
 
 router = APIRouter(prefix="/rfid", tags=["rfid"])
 
@@ -48,10 +51,67 @@ async def process_rfid_read(
         )
         db.add(alerta)
         await db.commit()
+        await db.refresh(alerta)
+
+        await broadcast_vigilante(
+            {
+                "tipo": "alerta",
+                "mensagem": alerta.descricao,
+                "nivel": "critico",
+                "alerta_id": str(alerta.id),
+            }
+        )
         
         event_data["status"] = "unknown"
         await cache.set(LATEST_EVENT_KEY, json.dumps(event_data))
         return {"status": "alert_created", "detail": "Tag desconhecida"}
+
+    if book.estado == BookEstado.emprestado:
+        loan_query = select(Loan).where(
+            and_(Loan.book_id == book.id, Loan.estado == LoanEstado.ativo)
+        )
+        loan_result = await db.execute(loan_query)
+        emprestimo = loan_result.scalar_one_or_none()
+
+        if emprestimo:
+            session_query = select(Session).where(
+                and_(
+                    Session.user_id == emprestimo.user_id,
+                    Session.estado == SessionEstado.ativa,
+                )
+            )
+            session_result = await db.execute(session_query)
+            sessao_ativa = session_result.scalar_one_or_none()
+
+            if not sessao_ativa:
+                alerta_query = select(Alerta.id).where(
+                    and_(
+                        Alerta.tipo == AlertaTipo.saida_sem_aprovacao,
+                        Alerta.livro_id == book.id,
+                        Alerta.resolvido.is_(False),
+                    )
+                )
+                alerta_result = await db.execute(alerta_query.limit(1))
+                if alerta_result.scalar_one_or_none() is None:
+                    alerta = Alerta(
+                        tipo=AlertaTipo.saida_sem_aprovacao,
+                        livro_id=book.id,
+                        descricao=(
+                            "RFID de livro emprestado lido fora de sessao de devolucao."
+                        ),
+                    )
+                    db.add(alerta)
+                    await db.commit()
+                    await db.refresh(alerta)
+
+                    await broadcast_vigilante(
+                        {
+                            "tipo": "alerta",
+                            "mensagem": alerta.descricao,
+                            "nivel": "critico",
+                            "alerta_id": str(alerta.id),
+                        }
+                    )
 
     # Tag conhecida -> Gera movimentação e atualiza evento
     movimentacao = MovimentacaoLivro(
