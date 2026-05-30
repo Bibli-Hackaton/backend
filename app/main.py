@@ -36,23 +36,6 @@ tags_metadata = [
     {"name": "vigilante", "description": "Monitoramento em tempo real do estado da biblioteca."},
     {"name": "ws", "description": "WebSockets para canais em tempo real."},
 ]
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-tags_metadata = [
-    {"name": "auth", "description": "Operações de Autenticação (Login e Validação de Tokens)."},
-    {"name": "configuracoes", "description": "Parametros configuraveis pelo admin."},
-    {"name": "usuarios", "description": "Gestão de usuários e permissões administrativas."},
-    {"name": "rfid", "description": "Comunicação com Leitores RFID e Webhooks de Hardware."},
-    {"name": "fechadura", "description": "Controle físico de acesso e WebSockets da Fechadura."},
-    {"name": "inventario", "description": "Gestão de varredura de acervo em lote e relatórios de furos."},
-    {"name": "livros", "description": "Cadastro de livros e log de auditoria (Rastreabilidade)."},
-    {"name": "sessoes", "description": "Controle de entrada, permanencia e saida na biblioteca."},
-    {"name": "emprestimos", "description": "Fluxo de emprestimo e historico de retiradas."},
-    {"name": "alertas", "description": "Monitoramento de alertas e resolucao de incidentes."},
-    {"name": "vigilante", "description": "Monitoramento em tempo real do estado da biblioteca."},
-    {"name": "ws", "description": "WebSockets para canais em tempo real."},
-]
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
